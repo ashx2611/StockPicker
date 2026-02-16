@@ -1,54 +1,104 @@
-# StockPicker Crew
+# StockPicker — AI-Powered Multi-Agent Investment Research System
 
-Welcome to the StockPicker Crew project, powered by [crewAI](https://crewai.com). This template is designed to help you set up a multi-agent AI system with ease, leveraging the powerful and flexible framework provided by crewAI. Our goal is to enable your agents to collaborate effectively on complex tasks, maximizing their collective intelligence and capabilities.
+An autonomous multi-agent AI pipeline that identifies trending companies in any market sector, conducts financial research, and recommends the best stock investment — all without human intervention.
+
+## Architecture
+
+```
+┌─────────────────────────────────────────────────────┐
+│                   Manager Agent                      │
+│               (GPT-4o · Orchestrator)                │
+│         Delegates and coordinates all tasks           │
+└──────────┬──────────────┬──────────────┬────────────┘
+           │              │              │
+           ▼              ▼              ▼
+  ┌────────────┐  ┌──────────────┐  ┌────────────┐
+  │  Trending   │  │  Financial   │  │   Stock    │
+  │  Company    │  │  Researcher  │  │   Picker   │
+  │  Finder     │  │              │  │            │
+  │ (GPT-4o-m) │  │ (GPT-4o-m)  │  │ (GPT-4o-m) │
+  └──────┬─────┘  └──────┬───────┘  └─────┬──────┘
+         │               │                │
+    Web Search      Web Search       Push Notification
+    (Serper)        (Serper)          (Pushover)
+```
+
+### How It Works
+
+1. **Discovery** — The Trending Company Finder agent searches the web for 2-3 companies gaining attention in a given sector
+2. **Research** — The Financial Researcher agent conducts deep analysis on each company's market position, outlook, and investment potential
+3. **Decision** — The Stock Picker agent evaluates all research and selects the best investment, then sends a push notification with the recommendation
+
+All agents are coordinated by a **Manager Agent** using a hierarchical delegation process.
+
+## Key Features
+
+- **Multi-Agent Orchestration** — 4 specialized AI agents coordinated via CrewAI's hierarchical process
+- **Autonomous Web Research** — Real-time web search integration via Serper API
+- **Structured Data Pipelines** — Pydantic models enforce validated, typed outputs at each stage
+- **3-Tier Memory System** — Long-term (SQLite), short-term (RAG), and entity memory for contextual learning across runs
+- **Push Notifications** — Instant investment alerts delivered via Pushover API
+- **Configurable** — Agents and tasks defined in YAML for easy customization
+
+## Tech Stack
+
+| Component | Technology |
+|-----------|-----------|
+| Agent Framework | CrewAI v1.9.3 |
+| LLMs | GPT-4o (manager), GPT-4o-mini (agents) |
+| Embeddings | text-embedding-3-small |
+| Web Search | Serper API |
+| Notifications | Pushover API |
+| Data Validation | Pydantic |
+| Memory Storage | SQLite + RAG |
+| Package Manager | UV (Astral) |
+| Language | Python 3.11+ |
+
+## Output
+
+The pipeline generates three artifacts:
+
+| File | Description |
+|------|-------------|
+| `output/trending_companies.json` | Trending companies with ticker symbols and reasons |
+| `output/research_report.json` | Detailed financial analysis per company |
+| `output/decision.md` | Final investment recommendation with rationale |
 
 ## Installation
 
-Ensure you have Python >=3.10 <3.14 installed on your system. This project uses [UV](https://docs.astral.sh/uv/) for dependency management and package handling, offering a seamless setup and execution experience.
-
-First, if you haven't already, install uv:
+Requires Python >=3.11 <3.14 and [UV](https://docs.astral.sh/uv/).
 
 ```bash
 pip install uv
 ```
 
-Next, navigate to your project directory and install the dependencies:
+Install dependencies:
 
-(Optional) Lock the dependencies and install them by using the CLI command:
 ```bash
 crewai install
 ```
-### Customizing
 
-**Add your `OPENAI_API_KEY` into the `.env` file**
+### Configuration
 
-- Modify `src/stock_picker/config/agents.yaml` to define your agents
-- Modify `src/stock_picker/config/tasks.yaml` to define your tasks
-- Modify `src/stock_picker/crew.py` to add your own logic, tools and specific args
-- Modify `src/stock_picker/main.py` to add custom inputs for your agents and tasks
+Create a `.env` file with your API keys:
 
-## Running the Project
-
-To kickstart your crew of AI agents and begin task execution, run this from the root folder of your project:
-
-```bash
-$ crewai run
+```
+OPENAI_API_KEY=your-openai-key
+SERPER_API_KEY=your-serper-key
+PUSHOVER_USER=your-pushover-user
+PUSHOVER_TOKEN=your-pushover-token
 ```
 
-This command initializes the stock_picker Crew, assembling the agents and assigning them tasks as defined in your configuration.
+Customize the agents and tasks:
 
-This example, unmodified, will run the create a `report.md` file with the output of a research on LLMs in the root folder.
+- `src/stock_picker/config/agents.yaml` — Agent roles, goals, and backstories
+- `src/stock_picker/config/tasks.yaml` — Task descriptions and expected outputs
+- `src/stock_picker/crew.py` — Crew logic, tools, and memory configuration
 
-## Understanding Your Crew
+## Running
 
-The stock_picker Crew is composed of multiple AI agents, each with unique roles, goals, and tools. These agents collaborate on a series of tasks, defined in `config/tasks.yaml`, leveraging their collective skills to achieve complex objectives. The `config/agents.yaml` file outlines the capabilities and configurations of each agent in your crew.
+```bash
+crewai run
+```
 
-## Support
-
-For support, questions, or feedback regarding the StockPicker Crew or crewAI.
-- Visit our [documentation](https://docs.crewai.com)
-- Reach out to us through our [GitHub repository](https://github.com/joaomdmoura/crewai)
-- [Join our Discord](https://discord.com/invite/X4JWnZnxPb)
-- [Chat with our docs](https://chatg.pt/DWjSBZn)
-
-Let's create wonders together with the power and simplicity of crewAI.
+This launches the full pipeline: discovery → research → decision → notification.
