@@ -1,0 +1,21 @@
+[project]
+name = "stock_picker"
+version = "0.1.0"
+description = "stock_picker using crewAI"
+requires-python = ">=3.11,<3.14"
+dependencies = [
+    "crewai[tools]==1.9.3"
+]
+
+[project.scripts]
+run_crew = "stock_picker.main:run"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.crewai]
+type = "crew"
+
+[tool.hatch.build.targets.wheel]
+packages = ["stock_picker/src/stock_picker"]
