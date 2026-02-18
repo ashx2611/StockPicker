@@ -36,7 +36,6 @@ All agents are coordinated by a **Manager Agent** using a hierarchical delegatio
 - **Multi-Agent Orchestration** — 4 specialized AI agents coordinated via CrewAI's hierarchical process
 - **Autonomous Web Research** — Real-time web search integration via Serper API
 - **Structured Data Pipelines** — Pydantic models enforce validated, typed outputs at each stage
-- **3-Tier Memory System** — Long-term (SQLite), short-term (RAG), and entity memory for contextual learning across runs
 - **Push Notifications** — Instant investment alerts delivered via Pushover API
 - **Configurable** — Agents and tasks defined in YAML for easy customization
 
@@ -50,7 +49,6 @@ All agents are coordinated by a **Manager Agent** using a hierarchical delegatio
 | Web Search | Serper API |
 | Notifications | Pushover API |
 | Data Validation | Pydantic |
-| Memory Storage | SQLite + RAG |
 | Package Manager | UV (Astral) |
 | Language | Python 3.11+ |
 
