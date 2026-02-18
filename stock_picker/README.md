@@ -27,7 +27,7 @@ An autonomous multi-agent AI pipeline that identifies trending companies in any 
 
 1. **Discovery** — The Trending Company Finder agent searches the web for 2-3 companies gaining attention in a given sector
 2. **Research** — The Financial Researcher agent conducts deep analysis on each company's market position, outlook, and investment potential
-3. **Decision** — The Stock Picker agent evaluates all research and selects the best investment, then sends a push notification with the recommendation
+3. **Decision** — The Stock Picker agent evaluates all research and selects the best investment, then sends a push notification with thse recommendation
 
 All agents are coordinated by a **Manager Agent** using a hierarchical delegation process.
 
